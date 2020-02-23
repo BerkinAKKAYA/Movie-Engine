@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MovieInfo</title>
+    <link rel="stylesheet" href="./style.css">
+
+    <style>
+      .grid{
+        display: grid;
+        grid-template-columns: 1fr 3fr;
+        margin: 50px 0;
+      }
+      
+      img{ width: 100%; }
+
+      .info{
+        width: calc(100% - 50px);
+        left: 100%;
+        transform: translateX(-100%);
+        position: relative;
+      }
+      .info h2{ padding: 5px 0 }
+
+      .plot {
+        max-width: 600px;
+        left: 50%;
+        transform: translateX(-50%);
+        position: relative;
+      }
+
+      @media (max-width: 600px) {
+        .grid{
+          grid-template-columns: 1fr;
+          font-size: .9em;
+        }
+        .info { width: 100%; padding-top: 20px }
+        .info h2{ font-size: 1.4em }
+        .plot{ font-size: .9em }
+      }
+
+      @media (min-width: 900px) {
+        .grid{
+          position: relative;
+          left: 50%;
+          transform: translateX(-50%);
+          max-width: 800px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-default">
+      <a href="index.html">Movie Engine</a>
+    </nav>
+
+    <div id="movie" class="well"></div>
+
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="./main.js"></script>
+    <script> getMovie(); </script>
+  </body>
+</html>
