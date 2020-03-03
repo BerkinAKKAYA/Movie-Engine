@@ -1,2 +1,2 @@
 # Movie-Engine
-Fully responsive movie search engine, built using OMDb API
+Fully responsive movie search engine, built using OMDb API and Axios
