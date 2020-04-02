@@ -10,7 +10,7 @@
   padding-top: 70px;
 }
 
-#search, #movie-holder {
+#search, #movie-holder{
   width: 80vw;
   position: relative;
   left: 50%;
@@ -114,4 +114,39 @@
 
 #movie-holder .movie-card img {
   width: 100%;
+}
+
+#pagination {
+  max-width: 75vw;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 100px 0;
+}
+
+#pagination .page {
+  width: 30px;
+  height: 30px;
+  border-radius: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: default;
+  margin-top: 10px;
+  margin-right: 10px;
+  text-decoration: none;
+  color: black;
+
+  border: 1px solid #aaa;
+  background-color: #fafafa;
+  transition: background-color .3s ease-in-out;
+}
+#pagination .page:nth-last-child(1) { margin: 0 }
+#pagination .page.active {
+  background-color: #aaa;
+  font-weight: bold;
+}
+#pagination .page:not(.active):hover {
+  background-color: #dedede;
+  cursor: pointer;
 }

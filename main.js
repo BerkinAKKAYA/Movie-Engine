@@ -3,24 +3,35 @@ const typeInput = document.querySelector("select");
 const yearInput = document.querySelector("input[type=number]");
 const yearHolder = yearInput.parentElement;
 const submitButton = document.querySelector("#search button");
+const cardHolder = document.getElementById("movie-holder");
+const pagination = document.getElementById("pagination");
 
-function UpdateDOM(keywords, type, year, page)
+function GenerateLink(keywords, type, year, page)
 {
-    let link = `https://www.omdbapi.com/?apikey=2348f7d4`;
-
+    let link = `http://www.omdbapi.com/?apikey=2348f7d4`;
     if (keywords) { link += `&s=${keywords}` }
     if (type)     { link += `&type=${type}`  }
     if (year)     { link += `&y=${year}`     }
     if (page)     { link += `&page=${page}`  }
+    return link;
+}
+
+function UpdateDOM(keywords, type, year, page)
+{
+    ClearDOM();
+
+    let link = GenerateLink(keywords,type,year,page);
 
     fetch(link).then(response => response.json().then(data => {
 
         if (data.Response == false)
             console.log("No result found.");
 
-        const cardHolder = document.getElementById("movie-holder");
         const cardTemplate = document.getElementById("movie-card-template");
         const results = data.Search;
+        const pageCount = parseInt(data.totalResults / 10);
+
+        ClearPagination();
 
         for (const result of results) {
             const card = cardTemplate.content.cloneNode(true);
@@ -30,7 +41,24 @@ function UpdateDOM(keywords, type, year, page)
             card.querySelector("a").href = `https://www.imdb.com/title/${result.imdbID}`;
             cardHolder.appendChild(card);
         }
+        for (let i=1; i<=Math.min(pageCount, 50); i++) {
+            AddPageButton(i, keywords,type,year,i);
+        }
+
+        if (page) { ActivatePageButton(page-1) }
+        else      { ActivatePageButton(0) }
+
+        ShowPagination(true);
     }));
+}
+
+ClearDOM();
+function ClearDOM()
+{
+    while (cardHolder.firstChild)
+        cardHolder.removeChild(cardHolder.firstChild);
+
+    ShowPagination(false);
 }
 
 function Search()
@@ -48,8 +76,29 @@ function Search()
     UpdateDOM(searchInput.value, type, year, null);
 }
 
-
-
+function ShowPagination(show)
+{ pagination.style.display = show ? "inline-block" : "none" }
+function ClearPagination()
+{
+    while (pagination.firstChild)
+        pagination.removeChild(pagination.firstChild);
+}
+function AddPageButton(pageIndex, keywords, type, year, page)
+{
+    const button = document.createElement("a");
+    button.className = "page";
+    button.innerHTML = pageIndex.toString();
+    button.addEventListener("click", () => UpdateDOM(keywords,type,year,page))
+    pagination.appendChild(button);
+}
+function ActivatePageButton(index)
+{
+    const buttons = document.querySelectorAll(".page");
+    for (const button of buttons) {
+        buttons.className = "page";
+    }
+    buttons[index].className += " active";
+}
 
 // VALIDATORS
 searchInput.addEventListener("keyup", OnKeywordChange);
