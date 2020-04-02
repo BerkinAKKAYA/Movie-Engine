@@ -6,7 +6,7 @@ const submitButton = document.querySelector("#search button");
 
 function UpdateDOM(keywords, type, year, page)
 {
-    let link = `http://www.omdbapi.com/?apikey=2348f7d4`;
+    let link = `https://www.omdbapi.com/?apikey=2348f7d4`;
 
     if (keywords) { link += `&s=${keywords}` }
     if (type)     { link += `&type=${type}`  }
