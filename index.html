@@ -1,37 +1,46 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
-    <title>MovieInfo</title>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Engine</title>
     <link rel="stylesheet" href="./style.css">
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    
     <link rel="icon" href="https://berkinakkaya.github.io/img/favicon.png" />
     <link rel="shortcut icon" href="https://berkinakkaya.github.io/img/favicon.png" />
-  </head>
-
-    <body>
-        <nav>
-        <a href="index.html">Movie Engine</a>
-        </nav>
-
-        <div class="search">
-        <h4>Search:</h4>
-
-        <form id="searchForm">
-        <input type="text" class="form-control" id="searchText" placeholder="Search Movies...">
-        </form>
+</head>
+<body>
+    <h1 id="header">Movie Engine</h1>
+    <div id="search">
+        <div>
+            <label>Search:</label>
+            <input type="text" placeholder="Search">
         </div>
-
-        <div id="movies" class="row"> </div>
-
-        <footer>
-            <p>Built by <a href="https://berkinakkaya.github.io">Berkin AKKAYA</a></p>
-        </footer>
-
-        <script src="./main.js"></script>
-    </body>
+        <div>
+            <label>Type:</label>
+            <select>
+                <option>All</option>
+                <option>Movie</option>
+                <option>Show</option>
+            </select>
+        </div>
+        <div>
+            <label>Year:</label>
+            <input type="number" value="0">
+        </div>
+        <button onclick="Search()">Search</button>
+    </div>
+    <div id="movie-holder">
+    </div>
+    <template id="movie-card-template">
+        <div class="movie-card">
+            <img src="" alt="Poster" >
+            <h3></h3>
+            <p></p>
+            <a href="#" target="_blank">
+                <button>Details</button>
+            </a>
+        </div>
+    </template>
+</body>
+<script src="./main.js"></script>
 </html>

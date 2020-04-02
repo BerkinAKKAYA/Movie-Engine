@@ -1,72 +1,87 @@
-$(document).ready(() => {
-  $('#searchForm').on('submit', (e) => {
-    let searchText = $('#searchText').val();
-    getMovies(searchText);
-    e.preventDefault();
-  });
-});
+const searchInput = document.querySelector("input[type=text]");
+const typeInput = document.querySelector("select");
+const yearInput = document.querySelector("input[type=number]");
+const yearHolder = yearInput.parentElement;
+const submitButton = document.querySelector("#search button");
 
-function getMovies(searchText){
-  axios.get('https://www.omdbapi.com?apikey=2348f7d4&s='+searchText)
-    .then((response) => {
-
-      let movies = response.data.Search;
-      let output = '';
-      $.each(movies, (index, movie) => {
-        output += `
-          <div>
-            <img src="${movie.Poster}">
-            <h5>${movie.Title}</h5>
-            <a onclick="movieSelected('${movie.imdbID}')" class="btn btn-primary" href="#">Movie Details</a>
-          </div>
-        `;
-      });
-
-      $('#movies').html(output);
-    })
-    .catch((err) => { console.log(err) });
-}
-
-function movieSelected(id)
+function UpdateDOM(keywords, type, year, page)
 {
-  sessionStorage.setItem('movieId', id);
-  window.location = 'movie.html';
-  return false;
+    let link = `http://www.omdbapi.com/?apikey=2348f7d4`;
+
+    if (keywords) { link += `&s=${keywords}` }
+    if (type)     { link += `&type=${type}`  }
+    if (year)     { link += `&y=${year}`     }
+    if (page)     { link += `&page=${page}`  }
+
+    fetch(link).then(response => response.json().then(data => {
+
+        if (data.Response == false)
+            console.log("No result found.");
+
+        const cardHolder = document.getElementById("movie-holder");
+        const cardTemplate = document.getElementById("movie-card-template");
+        const results = data.Search;
+
+        for (const result of results) {
+            const card = cardTemplate.content.cloneNode(true);
+            card.querySelector("h3").innerHTML = result.Title;
+            card.querySelector("img").src = result.Poster;
+            card.querySelector("p").innerHTML = result.Year;
+            card.querySelector("a").href = `https://www.imdb.com/title/${result.imdbID}`;
+            cardHolder.appendChild(card);
+        }
+    }));
 }
 
-function getMovie(){
-  let movieId = sessionStorage.getItem('movieId');
+function Search()
+{
+    if (!searchInput.value)
+        return;
+    
+    let year = yearInput.value == 0 ? null : yearInput.value;
+    let type = typeInput.value;
+    switch (type) {
+        case "All":  type = null;     break;
+        case "Show": type = "Series"; break;
+    }
 
-  axios.get('https://www.omdbapi.com?apikey=2348f7d4&i='+movieId)
-    .then((response) => {
-      let movie = response.data;
+    UpdateDOM(searchInput.value, type, year, null);
+}
 
-      let output =`
-        <div class="grid">
-          <img src="${movie.Poster}" class="thumbnail">
 
-          <div class="info">
-            <h2>${movie.Title}</h2>
-            <ul class="list-group">
-              <li class="list-group-item"><strong>Genre:</strong> ${movie.Genre}</li>
-              <li class="list-group-item"><strong>Released:</strong> ${movie.Released}</li>
-              <li class="list-group-item"><strong>Rated:</strong> ${movie.Rated}</li>
-              <li class="list-group-item"><strong>IMDB Rating:</strong> ${movie.imdbRating}</li>
-              <li class="list-group-item"><strong>Director:</strong> ${movie.Director}</li>
-              <li class="list-group-item"><strong>Writer:</strong> ${movie.Writer}</li>
-              <li class="list-group-item"><strong>Actors:</strong> ${movie.Actors}</li>
-            </ul>
-          </div>
-        </div>
 
-        <div class="plot">
-          <h3>Plot</h3>
-          <p> ${movie.Plot} </p>
-          <a href="https://imdb.com/title/${movie.imdbID}" target="_blank" class="btn btn-primary">View IMDB</a>
-        </div>
-      `;
 
-      $('#movie').html(output);
-    })
-    .catch((err) => { console.log(err) });
+// VALIDATORS
+searchInput.addEventListener("keyup", OnKeywordChange);
+yearInput.addEventListener("change", OnYearChange);
+OnKeywordChange();
+OnYearChange();
+
+function OnYearChange()
+{
+    if (yearInput.value == 1)
+    {   yearInput.value = 1800 }
+
+    if (yearInput.value < 1800)
+    {
+        yearInput.value = 0;
+        yearHolder.style.opacity = .25;
+    }
+    else { yearHolder.style.opacity = 1 }
+
+    if (yearInput.value > 2025)
+    {   yearInput.value = 2025 }
+}
+function OnKeywordChange()
+{
+    if (searchInput.value.length > 1)
+    {
+        submitButton.style.pointerEvents = "unset";
+        submitButton.style.opacity = 1;
+    }
+    else
+    {
+        submitButton.style.pointerEvents = "none";
+        submitButton.style.opacity = .25;
+    } 
 }
