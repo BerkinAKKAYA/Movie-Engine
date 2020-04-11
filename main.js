@@ -8,7 +8,7 @@ const pagination = document.getElementById("pagination");
 
 function GenerateLink(keywords, type, year, page)
 {
-    let link = `http://www.omdbapi.com/?apikey=2348f7d4`;
+    let link = `https://www.omdbapi.com/?apikey=2348f7d4`;
     if (keywords) { link += `&s=${keywords}` }
     if (type)     { link += `&type=${type}`  }
     if (year)     { link += `&y=${year}`     }
